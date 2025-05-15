@@ -1,35 +1,40 @@
 <template>
-    <!-- Employee List Card -->
     <template if:true={showListView}>
         <lightning-card title="Employee List">
-            <lightning-datatable
-                key-field="Id"
-                data={employees}
-                columns={columns}
-                onrowaction={handleRowAction}
-                onrowselection={handleRowSelection}
-                show-row-number-column
-                selected-rows={selectedEmployeeIds}
-                max-row-selection="999">
-            </lightning-datatable>
+            <div class="slds-m-around_medium">
+                <lightning-combobox name="pageSize" label="Records per page" value={pageSize} placeholder="Select number" options={pageSizeOptions} onchange={handlePageSizeChange}> </lightning-combobox>
 
-            <div class="slds-p-around_medium">
-                <lightning-button label="Add Employee" onclick={handleAddEmployee} class="slds-m-right_small"></lightning-button>
-                <lightning-button label="Delete Employee" variant="destructive" onclick={handleBulkDelete}></lightning-button>
+                <lightning-datatable
+                    key-field="Id"
+                    data={paginatedEmployees}
+                    columns={columns}
+                    onrowaction={handleRowAction}
+                    onrowselection={handleRowSelection}
+                    selected-rows={selectedEmployeeIds}
+                    max-row-selection="999"></lightning-datatable>
+                
+
+                <div class="slds-m-top_small">
+                    <lightning-button label="⏮ Back" onclick={handleBackward} disabled={isFirstPage} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Next ⏭" onclick={handleForward} disabled={isLastPage}></lightning-button>
+                </div>
+
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Add Employee" onclick={handleAddEmployee} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Delete Employee" variant="destructive" onclick={handleBulkDelete}></lightning-button>
+                </div>
             </div>
         </lightning-card>
     </template>
 
-    <!-- Add/Edit Employee Card -->
     <template if:true={showFormView}>
         <lightning-card title={cardTitle}>
             <div class="slds-p-around_medium">
-                <lightning-input label="Employee ID" value={employeeId} disabled onchange={handleInputChange} name="employeeId"></lightning-input>
+                <lightning-input label="Employee ID" value={employeeId} disabled name="employeeId"></lightning-input>
                 <lightning-input label="Name" value={name} onchange={handleInputChange} name="name" required></lightning-input>
                 <lightning-combobox label="Department" value={department} options={departmentOptions} onchange={handleInputChange} name="department" required></lightning-combobox>
                 <lightning-input label="Designation" value={designation} onchange={handleInputChange} name="designation" required></lightning-input>
                 <lightning-input label="Joining Date" type="date" value={joiningDate} onchange={handleInputChange} name="joiningDate" required></lightning-input>
-                
                 <div class="slds-m-top_medium">
                     <lightning-button label="Save" variant="brand" onclick={handleSave} class="slds-m-right_small"></lightning-button>
                     <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
@@ -38,3 +43,4 @@
         </lightning-card>
     </template>
 </template>
+
